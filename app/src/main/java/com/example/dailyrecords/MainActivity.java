@@ -28,13 +28,16 @@ public class MainActivity extends AppCompatActivity {
             "SEVENTEEN","EIGHTEEN","NINETEEN","TWENTY"    };
 
     private SQLite_Handler handler;
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SQLite_Handler handler = new SQLite_Handler(getApplicationContext());
+        handler = new SQLite_Handler(getApplicationContext());
+        db = handler.getReadableDatabase();
+        //handler.onCreate(db);
         //Enter_Activity EA = new Enter_Activity();
 
         final RecyclerView recyclerView = findViewById(R.id.recyclerview1);
@@ -49,11 +52,7 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(itemDecoration);
 
         //DataBaseから表示するデータの配列を取ってくる
-        try{
-            String[] loc_array = readData();
-        }catch(NullPointerException e){
-            String[] loc_array = listDatas;
-        }
+        String[] loc_array = readData();
 
 
         //アダプタのセット
@@ -127,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         List<String> title_list = new ArrayList<String>();
         List<String> content_list = new ArrayList<String>();
 
-        SQLiteDatabase db = handler.getReadableDatabase();
+        //SQLiteDatabase db = handler.getReadableDatabase();
         Cursor cursor = db.query(
                 handler.TABLE_NAME,
                 new String[]{"location", "date", "title", "content"},
@@ -140,10 +139,14 @@ public class MainActivity extends AppCompatActivity {
         cursor.moveToFirst();  // databaseの最初の行へ移動
 
         for(int i=0; i<cursor.getCount(); i+=1){
-            loc_list.add(cursor.getString(cursor.getColumnIndex("location"))); // cursor.getColumnincex(カラム名)でそのカラムの列数を渡す
-            date_list.add(cursor.getString(cursor.getColumnIndex("date")));
-            title_list.add(cursor.getString(cursor.getColumnIndex("title")));
-            content_list.add(cursor.getString(cursor.getColumnIndex("content")));
+            //loc_list.add(cursor.getString(cursor.getColumnIndex("location"))); // cursor.getColumnincex(カラム名)でそのカラムの列数を渡す
+            loc_list.add(cursor.getString(0));
+            //date_list.add(cursor.getString(cursor.getColumnIndex("date")));
+            date_list.add(cursor.getString(1));
+            //title_list.add(cursor.getString(cursor.getColumnIndex("title")));
+            title_list.add(cursor.getString(2));
+            //content_list.add(cursor.getString(cursor.getColumnIndex("content")));
+            content_list.add(cursor.getString(3));
             cursor.moveToNext();
         }
 

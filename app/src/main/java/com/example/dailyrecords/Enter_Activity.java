@@ -40,6 +40,8 @@ public class Enter_Activity extends AppCompatActivity {
         List<String> content_list = new ArrayList<String>();
 
         SQLiteDatabase db = handler.getReadableDatabase();
+        //MainActivity Main = new MainActivity();
+        //SQLiteDatabase db = Main.db;
         Cursor cursor = db.query(
                 handler.TABLE_NAME,
                 new String[]{"location", "date", "title", "content"},

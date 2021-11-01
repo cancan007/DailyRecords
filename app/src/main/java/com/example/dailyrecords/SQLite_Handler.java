@@ -40,11 +40,14 @@ public class SQLite_Handler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        Date date = new Date();
+
         db.execSQL(
                 SQL_CREATE_TABLE
         );
-        saveData(db, "Tokyo", toDate("2017/03/02"), "Example", "First Test");
-        saveData(db, "Germany", toDate("2022/02/12"), "Travel", "Great Travel");
+        saveData(db, "Tokyo", date, "Capital", "First Test");
+        saveData(db, "Germany", date, "Travel", "Great Travel");
     }
 
     @Override
@@ -62,23 +65,23 @@ public class SQLite_Handler extends SQLiteOpenHelper {
     public void saveData(SQLiteDatabase db, String location, Date date, String title, String content){
         ContentValues values = new ContentValues();
         values.put("location", location);
-        values.put("date", toString(date));
+        values.put("date", date.toString());
         values.put("title", title);
         values.put("content", content);
 
         db.insert(TABLE_NAME, null, values);
     }
 
-    public String toString(Date date){
-        String str = new SimpleDateFormat("yyyy-MM-dd").format(date);
-        return str;
-    }
+    //public String toString(Date date){
+        //String str = new SimpleDateFormat("yyyy-MM-dd").format(date);
+        //return str;
+    //}
 
-    public Date toDate(String str){
+    public Date toDate(String str) {
         try {
             Date date = new SimpleDateFormat("yyyy-MM-dd").parse(str);
             return date;
-        }catch(ParseException e){
+        } catch (ParseException e) {
             e.printStackTrace();
             return null;
         }
