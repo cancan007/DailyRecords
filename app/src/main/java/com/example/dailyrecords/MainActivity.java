@@ -6,12 +6,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +29,10 @@ public class MainActivity extends AppCompatActivity {
             "THIRTEEN","FOURTEEN","FIFTEEN","SIXTEEN",
             "SEVENTEEN","EIGHTEEN","NINETEEN","TWENTY"    };
 
+    public static final String POSITION_DATA = "com.example.dailyrecords.MainActivity";
     private SQLite_Handler handler;
     private SQLiteDatabase db;
+    private Button createButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
         //アダプタのセット
         SampleRecyclerAdapter adapter = new SampleRecyclerAdapter(loc_array);
         recyclerView.setAdapter(adapter);
+
+        createButton = findViewById(R.id.m_create);
+        createButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplication(), Enter_Activity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /* -------------------------------------------------------
@@ -91,6 +104,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     int position = holder.getAdapterPosition();
                     Toast.makeText(v.getContext(), itemDatas[position], Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplication(), Display_Content.class);
+                    intent.putExtra(POSITION_DATA, holder.getLayoutPosition());
+                    startActivity(intent);
                 }
             });
 
@@ -139,8 +155,8 @@ public class MainActivity extends AppCompatActivity {
         cursor.moveToFirst();  // databaseの最初の行へ移動
 
         for(int i=0; i<cursor.getCount(); i+=1){
-            //loc_list.add(cursor.getString(cursor.getColumnIndex("location"))); // cursor.getColumnincex(カラム名)でそのカラムの列数を渡す
-            loc_list.add(cursor.getString(0));
+            loc_list.add(cursor.getString(cursor.getColumnIndex("Location"))); // cursor.getColumnincex(カラム名)でそのカラムの列数を渡す
+            //loc_list.add(cursor.getString(0));
             //date_list.add(cursor.getString(cursor.getColumnIndex("date")));
             date_list.add(cursor.getString(1));
             //title_list.add(cursor.getString(cursor.getColumnIndex("title")));

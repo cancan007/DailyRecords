@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DailyRecords">
         <activity
+            android:name=".Display_Content"
+            android:exported="true" />
+        <activity
             android:name=".Enter_Activity"
             android:exported="true" />
         <activity
